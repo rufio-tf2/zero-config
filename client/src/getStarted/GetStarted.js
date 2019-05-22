@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { Button, setHasSetup, useStore } from '../common';
+import { Button, setSetup, useStore } from '../common';
 
 const GetStarted = () => {
   const { dispatch } = useStore();
-  return (
-    <Button
-      onClick={() => {
-        dispatch(setHasSetup(true));
-      }}
-    >
-      GetStarted
-    </Button>
-  );
+  const setTF2Path = () => {
+    dispatch(
+      setSetup({
+        tf2Path: 'this/is/a/path',
+      }),
+    );
+  };
+
+  return <Button onClick={setTF2Path}>GetStarted</Button>;
 };
 
 export default GetStarted;

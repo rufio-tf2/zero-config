@@ -1,3 +1,12 @@
+export const get = (host, path, defaultValue) => {
+  const value = path.reduce(
+    (result, key) => (result && result[key] ? result[key] : undefined),
+    host,
+  );
+
+  return value === undefined ? defaultValue : value;
+};
+
 export const getComponentDisplayName = Component =>
   Component.displayName || Component.name || 'Component';
 

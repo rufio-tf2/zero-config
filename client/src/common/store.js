@@ -1,5 +1,8 @@
 import produce from 'immer';
 
+import { get } from './util';
+
+// Actions
 const createAction = (type, payloadCreator) => {
   if (typeof payloadCreator === 'undefined') {
     return () => ({ type });
@@ -11,17 +14,25 @@ const createAction = (type, payloadCreator) => {
 const addToastMessage = createAction('toast/add', message => message);
 const removeToastMessage = createAction('toast/remove');
 
-const setHasSetup = createAction('hasSetup/set', hasSetup => hasSetup);
+const clearSetup = createAction('setup/clear');
+const setSetup = createAction('setup/set', setup => setup);
+
+// Selectors
+const hasValidSetup = setup => !!get(setup, ['tf2Path']);
 
 const initialState = {
-  hasSetup: false,
+  setup: null,
   toast: null,
 };
 
 const reducer = produce((draft, action) => {
   switch (action.type) {
-    case 'hasSetup/set':
-      draft.hasSetup = action.payload;
+    case 'setup/clear':
+      draft.setup = null;
+      break;
+
+    case 'setup/set':
+      draft.setup = action.payload;
       break;
 
     case 'toast/add':
@@ -40,8 +51,10 @@ const reducer = produce((draft, action) => {
 
 export {
   addToastMessage,
+  clearSetup,
+  hasValidSetup,
   initialState,
   reducer as default,
   removeToastMessage,
-  setHasSetup,
+  setSetup,
 };

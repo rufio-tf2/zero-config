@@ -4,7 +4,7 @@ import { Box, GlobalNav, LoadingIndicator } from '../common';
 
 const AnonymousLayout = ({ children }) => (
   <>
-    <GlobalNav />
+    <GlobalNav title="Zero Config" />
     <Suspense
       fallback={
         <Box as="main" display="flex" justifyContent="center" my={10}>

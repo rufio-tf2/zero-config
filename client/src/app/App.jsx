@@ -1,5 +1,5 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import {
   createHistory,
   createMemorySource,
@@ -14,15 +14,15 @@ import AuthenticatedRoute from './AuthenticatedRoute';
 import theme from './theme';
 import ToastMessages from './ToastMessages';
 
-let source = createMemorySource('/');
-let history = createHistory(source);
+const source = createMemorySource('/');
+const history = createHistory(source);
 
 const GetStartedPage = React.lazy(() => import('../getStarted'));
 const OptionsInterface = React.lazy(() => import('../optionsInterface'));
 
 const App = () => (
   <StoreProvider>
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
       <>
         <CssBaseline />
         <LocationProvider history={history}>
@@ -33,7 +33,7 @@ const App = () => (
         </LocationProvider>
         <ToastMessages />
       </>
-    </ThemeProvider>
+    </MuiThemeProvider>
   </StoreProvider>
 );
 
