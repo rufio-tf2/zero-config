@@ -1,0 +1,87 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "main": "public/electron-starter.js",
+  "homepage": "./",
+  "private": true,
+  "scripts": {
+    "build": "rescripts build",
+    "electron-dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "build -mw",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "start": "rescripts start",
+    "test": "rescripts test"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "electron-is-dev": "^1.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
+    "typeface-roboto": "^0.0.54"
+  },
+  "devDependencies": {
+    "@rescripts/cli": "^0.0.10",
+    "@rescripts/rescript-env": "^0.0.10",
+    "concurrently": "^4.1.0",
+    "electron": "^5.0.1",
+    "electron-builder": "^20.40.2",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import-order-alphabetical": "^0.0.2",
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1",
+    "wait-on": "^3.2.0"
+  },
+  "author": {
+    "name": "Rufio",
+    "email": "rufio-tf2@gmail.com",
+    "url": "https://github.com/rufio-tf2"
+  },
+  "build": {
+    "appId": "com.my-website.my-app",
+    "productName": "MyApp",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add",
+      "react-scripts test --bail --env=jsdom --findRelatedTests --watchAll=false"
+    ],
+    "src/**/*.{json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
