@@ -1,20 +1,45 @@
 const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-
-const path = require('path');
 const isDev = require('electron-is-dev');
+const os = require('os');
+const path = require('path');
 
-let mainWindow;
+const WINDOW_SETTINGS = {
+  width: 1087,
+  height: 672,
+  minWidth: 320,
+  minHeight: 240,
+  show: false,
+  webPreferences: {
+    devTools: true
+    // nodeIntegration: true
+  }
+};
+
+let window = null;
+
+const { app, BrowserWindow } = electron;
+
+const isSecondInstance = app.makeSingleInstance(() => {
+  if (window) {
+    if (window.isMinimized()) {
+      window.restore();
+    }
+    window.focus();
+  }
+});
+
+if (isSecondInstance) {
+  app.quit();
+}
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
-    webPreferences: { nodeIntegration: true }
-  });
+  if (os.type() !== 'Darwin') {
+    WINDOW_SETTINGS.frame = false;
+  }
 
-  mainWindow.loadURL(
+  window = new BrowserWindow(WINDOW_SETTINGS);
+
+  window.loadURL(
     isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`
@@ -23,10 +48,10 @@ function createWindow() {
   if (isDev) {
     // Open the DevTools.
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    mainWindow.webContents.openDevTools();
+    window.webContents.openDevTools();
   }
 
-  mainWindow.on('closed', () => (mainWindow = null));
+  window.on('closed', () => (window = null));
 }
 
 app.on('ready', createWindow);
@@ -38,7 +63,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (window === null) {
     createWindow();
   }
 });
