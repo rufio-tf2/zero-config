@@ -1,25 +1,27 @@
+/* eslint-disable no-unused-vars, sort-keys */
+
 const electron = require('electron');
 const isDev = require('electron-is-dev');
-const os = require('os');
 const path = require('path');
 
 const WINDOW_SETTINGS = {
-  width: 1087,
   height: 672,
+  width: 1087,
   minWidth: 320,
   minHeight: 240,
   show: false,
   webPreferences: {
-    devTools: true
+    devTools: true,
     // nodeIntegration: true
-  }
+  },
 };
 
 let window = null;
 
 const { app, BrowserWindow } = electron;
 
-const isSecondInstance = app.makeSingleInstance(() => {
+app.requestSingleInstanceLock();
+app.on('second-instance', (event, argv, cwd) => {
   if (window) {
     if (window.isMinimized()) {
       window.restore();
@@ -28,21 +30,13 @@ const isSecondInstance = app.makeSingleInstance(() => {
   }
 });
 
-if (isSecondInstance) {
-  app.quit();
-}
-
 function createWindow() {
-  if (os.type() !== 'Darwin') {
-    WINDOW_SETTINGS.frame = false;
-  }
-
   window = new BrowserWindow(WINDOW_SETTINGS);
 
   window.loadURL(
     isDev
       ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      : `file://${path.join(__dirname, '../build/index.html')}`,
   );
 
   if (isDev) {

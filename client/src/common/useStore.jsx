@@ -5,10 +5,9 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
-import useSessionStorage from 'react-use/lib/useSessionStorage';
 
-import { createApi } from './api';
 import reducer, { initialState } from './store';
+import useElectronSettings from './useElectronSettings';
 import { isArray, omit } from './util';
 
 const STORAGE_DENY_LIST = ['toast'];
@@ -31,26 +30,26 @@ function useStore() {
 }
 
 const StoreProvider = props => {
-  const [storedState, storeState] = useSessionStorage('state', initialState);
+  const [storedState, storeState] = useElectronSettings('state', initialState);
   // Default any properties omitted from the session-storage due to the deny-list.
   const reducerState = {
     ...initialState,
     // Remove any stale storage of keys on the deny-list.
     ...omit(storedState, STORAGE_DENY_LIST),
   };
+
   const [state, dispatch] = useReducer(
     withBatchedActions(reducer),
     reducerState,
   );
+
   useEffect(() => {
     storeState(omit(state, STORAGE_DENY_LIST));
   }, [state, storeState]);
-  const api = useMemo(() => createApi(), []);
-  const value = useMemo(() => {
-    api.setContext(dispatch, state.session);
 
-    return { api, dispatch, state };
-  }, [api, state]);
+  const value = useMemo(() => {
+    return { dispatch, state };
+  }, [state]);
 
   return <StoreContext.Provider {...props} value={value} />;
 };

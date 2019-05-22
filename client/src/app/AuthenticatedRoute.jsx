@@ -11,7 +11,7 @@ const AuthenticatedRoute = ({
 }) => {
   const { state } = useStore();
 
-  if (!state.settings.hasSetup) {
+  if (!state.hasSetup) {
     return <Redirect from="" noThrow to="/start" />;
   }
 

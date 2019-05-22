@@ -11,19 +11,17 @@ const createAction = (type, payloadCreator) => {
 const addToastMessage = createAction('toast/add', message => message);
 const removeToastMessage = createAction('toast/remove');
 
-const setSettings = createAction('settings/set', settings => settings);
+const setHasSetup = createAction('hasSetup/set', hasSetup => hasSetup);
 
 const initialState = {
-  settings: {
-    hasSetup: true,
-  },
+  hasSetup: false,
   toast: null,
 };
 
 const reducer = produce((draft, action) => {
   switch (action.type) {
-    case 'settings/set':
-      draft.settings = action.payload;
+    case 'hasSetup/set':
+      draft.hasSetup = action.payload;
       break;
 
     case 'toast/add':
@@ -45,5 +43,5 @@ export {
   initialState,
   reducer as default,
   removeToastMessage,
-  setSettings,
+  setHasSetup,
 };

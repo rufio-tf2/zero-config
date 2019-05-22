@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "rescripts build",
-    "electron-dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev": "yarn electron-dev",
+    "electron-dev": "concurrently \"SET BROWSER=none&&yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron-pack": "build -mw",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "@material-ui/styles": "^3.0.0-alpha.10",
     "@reach/router": "^1.2.1",
     "electron-is-dev": "^1.1.0",
@@ -35,6 +37,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
+    "react-use": "^9.0.0",
     "typeface-roboto": "^0.0.54"
   },
   "devDependencies": {
