@@ -11,12 +11,21 @@ const createAction = (type, payloadCreator) => {
 const addToastMessage = createAction('toast/add', message => message);
 const removeToastMessage = createAction('toast/remove');
 
+const setSettings = createAction('settings/set', settings => settings);
+
 const initialState = {
+  settings: {
+    hasSetup: true,
+  },
   toast: null,
 };
 
 const reducer = produce((draft, action) => {
   switch (action.type) {
+    case 'settings/set':
+      draft.settings = action.payload;
+      break;
+
     case 'toast/add':
       // TODO: Handle toast queues
       draft.toast = action.payload;
@@ -36,4 +45,5 @@ export {
   initialState,
   reducer as default,
   removeToastMessage,
+  setSettings,
 };
