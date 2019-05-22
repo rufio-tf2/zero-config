@@ -1,7 +1,5 @@
 import produce from 'immer';
 
-import { get } from './util';
-
 // Actions
 const createAction = (type, payloadCreator) => {
   if (typeof payloadCreator === 'undefined') {
@@ -17,11 +15,11 @@ const removeToastMessage = createAction('toast/remove');
 const clearSetup = createAction('setup/clear');
 const setSetup = createAction('setup/set', setup => setup);
 
-// Selectors
-const hasValidSetup = setup => !!get(setup, ['tf2Path']);
-
 const initialState = {
-  setup: null,
+  game: {
+    fullName: 'Team Fortress 2',
+  },
+  setup: {},
   toast: null,
 };
 
@@ -52,7 +50,6 @@ const reducer = produce((draft, action) => {
 export {
   addToastMessage,
   clearSetup,
-  hasValidSetup,
   initialState,
   reducer as default,
   removeToastMessage,

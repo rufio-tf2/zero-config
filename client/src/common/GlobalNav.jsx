@@ -7,7 +7,7 @@ import Box from './Box';
 import ButtonMenu from './ButtonMenu';
 import IconButton from './IconButton';
 import Text from './Text';
-import { ReactComponent as TF2Logo } from './tf2-logo.svg';
+import { ReactComponent as GameLogo } from './tf2-logo.svg'; // TODO: Get much smaller version
 import Tooltip from './Tooltip';
 
 const GlobalNavIconLink = ({ href, icon: Icon, label }) => (
@@ -31,10 +31,10 @@ const GlobalNavIconMenu = ({ children, icon: Icon, label }) => (
 );
 
 const GlobalNav = ({ children, title }) => (
-  <AppBar position="sticky">
+  <AppBar position="static">
     <Toolbar>
       <Box alignItems="center" color="inherit" display="flex">
-        <TF2Logo height="10%" width="10%" />
+        <GameLogo height="10%" width="10%" />
         <Text as="small" color="inherit" ml={1} variant="caption">
           v{process.env.REACT_APP_VERSION}
         </Text>

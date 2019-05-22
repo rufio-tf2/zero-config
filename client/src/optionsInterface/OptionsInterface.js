@@ -1,17 +1,15 @@
 import React from 'react';
 
-import { Box, Button, clearSetup, Text, useStore } from '../common';
+import { Box, Button, Text, useSetup } from '../common';
 
 const OptionsInterface = () => {
-  const { dispatch } = useStore();
-  const clearSettings = () => {
-    dispatch(clearSetup());
-  };
+  const { clearSetup, setup } = useSetup();
 
   return (
     <Box>
-      <Text>Options</Text>
-      <Button onClick={clearSettings}>Clear Settings</Button>
+      <Text as="h3">Options</Text>
+      <Text>{setup.gamePath}</Text>
+      <Button onClick={clearSetup}>Clear Settings</Button>
     </Box>
   );
 };

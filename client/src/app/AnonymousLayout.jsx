@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Box, GlobalNav, LoadingIndicator } from '../common';
 
 const AnonymousLayout = ({ children }) => (
-  <>
+  <Box display="flex" flexDirection="column" height="100vh">
     <GlobalNav title="Zero Config" />
     <Suspense
       fallback={
@@ -12,9 +12,9 @@ const AnonymousLayout = ({ children }) => (
         </Box>
       }
     >
-      {children}
+      <Box flex="1 1 auto">{children}</Box>
     </Suspense>
-  </>
+  </Box>
 );
 
 export default AnonymousLayout;

@@ -1,7 +1,7 @@
 import { Redirect } from '@reach/router';
 import React from 'react';
 
-import { hasValidSetup, useStore } from '../common';
+import { useSetup } from '../common';
 import AnonymousLayout from './AnonymousLayout';
 
 const AnonymousRoute = ({
@@ -9,9 +9,9 @@ const AnonymousRoute = ({
   layout: Layout = AnonymousLayout,
   ...props
 }) => {
-  const { state } = useStore();
+  const { hasValidSetup } = useSetup();
 
-  if (hasValidSetup(state.setup)) {
+  if (hasValidSetup) {
     return <Redirect from="" noThrow to="/" />;
   }
 

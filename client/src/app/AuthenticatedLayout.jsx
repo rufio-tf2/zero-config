@@ -5,7 +5,7 @@ import { Box, GlobalNav, LoadingIndicator } from '../common';
 
 const AuthenticatedLayout = ({ children }) => {
   return (
-    <>
+    <Box display="flex" flexDirection="column" height="100vh">
       <GlobalNav title="Zero Config" />
       <Suspense
         fallback={
@@ -14,9 +14,9 @@ const AuthenticatedLayout = ({ children }) => {
           </Box>
         }
       >
-        {children}
+        <Box flex="1 1 auto">{children}</Box>
       </Suspense>
-    </>
+    </Box>
   );
 };
 

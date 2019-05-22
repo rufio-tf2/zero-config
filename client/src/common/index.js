@@ -4,11 +4,13 @@ export { default as ButtonMenu } from './ButtonMenu';
 export { default as GlobalNav } from './GlobalNav';
 export { default as IconButton } from './IconButton';
 export { default as LoadingIndicator } from './LoadingIndicator';
+export { default as Paper } from './Paper';
 export { default as Text } from './Text';
+export { default as TextField } from './TextField';
 export { default as Tooltip } from './Tooltip';
 export { default as useAsyncCall } from './useAsyncCall';
 export { default as usePastDelay } from './usePastDelay';
-export { default as useSettings } from './useSettings';
+export { default as useSetup } from './useSetup';
 export { default as useStore, StoreProvider } from './useStore';
 export { default as useToast } from './useToast';
 
