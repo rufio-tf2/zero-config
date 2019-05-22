@@ -9,31 +9,30 @@ const WINDOW_SETTINGS = {
   width: 1087,
   minWidth: 320,
   minHeight: 240,
-  show: false,
   webPreferences: {
     devTools: true,
-    // nodeIntegration: true
+    nodeIntegration: true,
   },
 };
 
-let window = null;
+let mainWindow = null;
 
 const { app, BrowserWindow } = electron;
 
 app.requestSingleInstanceLock();
 app.on('second-instance', (event, argv, cwd) => {
-  if (window) {
-    if (window.isMinimized()) {
-      window.restore();
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
     }
-    window.focus();
+    mainWindow.focus();
   }
 });
 
 function createWindow() {
-  window = new BrowserWindow(WINDOW_SETTINGS);
+  mainWindow = new BrowserWindow(WINDOW_SETTINGS);
 
-  window.loadURL(
+  mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`,
@@ -42,10 +41,10 @@ function createWindow() {
   if (isDev) {
     // Open the DevTools.
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    window.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
   }
 
-  window.on('closed', () => (window = null));
+  mainWindow.on('closed', () => (mainWindow = null));
 }
 
 app.on('ready', createWindow);

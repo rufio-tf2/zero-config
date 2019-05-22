@@ -34,7 +34,7 @@ const GlobalNav = ({ children, title }) => (
   <AppBar position="sticky">
     <Toolbar>
       <Box alignItems="center" color="inherit" display="flex">
-        <TF2Logo />
+        <TF2Logo height="10%" width="10%" />
         <Text as="small" color="inherit" ml={1} variant="caption">
           v{process.env.REACT_APP_VERSION}
         </Text>
