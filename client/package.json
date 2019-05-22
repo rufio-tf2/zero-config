@@ -1,18 +1,28 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "main": "public/electron-starter.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "private": true,
-  "scripts": {
-    "build": "rescripts build",
-    "dev": "yarn electron-dev",
-    "electron-dev": "concurrently \"SET BROWSER=none&&yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-pack": "build -mw",
-    "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "start": "rescripts start",
-    "test": "rescripts test"
+  "author": {
+    "name": "Rufio",
+    "email": "rufio-tf2@gmail.com",
+    "url": "https://github.com/rufio-tf2"
+  },
+  "build": {
+    "appId": "com.my-website.my-app",
+    "productName": "Zero Config",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "browserslist": {
     "production": [
@@ -25,6 +35,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "scripts": {
+    "build": "rescripts build",
+    "dev": "yarn electron-dev",
+    "electron-dev": "concurrently \"SET BROWSER=none&&yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "build -w",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "start": "rescripts start",
+    "test": "rescripts test"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
@@ -53,26 +73,6 @@
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "wait-on": "^3.2.0"
-  },
-  "author": {
-    "name": "Rufio",
-    "email": "rufio-tf2@gmail.com",
-    "url": "https://github.com/rufio-tf2"
-  },
-  "build": {
-    "appId": "com.my-website.my-app",
-    "productName": "MyApp",
-    "copyright": "Copyright © 2019 ${author}",
-    "mac": {
-      "category": "public.app-category.utilities"
-    },
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    }
   },
   "husky": {
     "hooks": {
