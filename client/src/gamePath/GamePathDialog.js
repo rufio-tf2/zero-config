@@ -13,10 +13,10 @@ import {
   useStore,
 } from '../common';
 
-const openDirectoryDialog = handleCallback => {
+const openDirectoryDialog = onSelectDirectory => {
   return remote.dialog.showOpenDialog(
     { properties: ['openDirectory'] },
-    handleCallback,
+    onSelectDirectory,
   );
 };
 
@@ -41,7 +41,7 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
     onClose();
   }, [inputGamePath, onClose, setSetup, setup]);
 
-  const handleReceiveGamePath = fileDirs => {
+  const handleSelectDirectory = fileDirs => {
     const gamePath = fileDirs[0];
     setInputGamePath(gamePath);
   };
@@ -76,13 +76,13 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         <TextField
           autoFocus
           fullWidth
-          helperText={`(Default Windows) C:\Program Files (x86)\\Steam\\steamapps\\common\\${
+          helperText={`(Default Windows) C:\\Program Files (x86)\\Steam\\steamapps\\common\\${
             state.game.fullName
           }`}
           id="game-path"
           label="Click to select your game folder"
           onChange={handleSetGamePath}
-          onClick={() => openDirectoryDialog(handleReceiveGamePath)}
+          onClick={() => openDirectoryDialog(handleSelectDirectory)}
           readOnly
           required
           value={inputGamePath}
@@ -99,9 +99,6 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
           variant="contained"
         >
           Confirm
-        </Button>
-        <Button onClick={() => console.log('inputGamePath', inputGamePath)}>
-          log
         </Button>
       </Dialog.Actions>
     </Dialog>
