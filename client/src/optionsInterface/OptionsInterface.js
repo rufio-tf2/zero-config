@@ -1,12 +1,21 @@
 import React, { useCallback, useState } from 'react';
 
-import { Box, Button, GlobalNav, Text, useGameData, useMeta } from '../common';
+import {
+  Box,
+  Button,
+  GlobalNav,
+  Text,
+  useGameData,
+  useMeta,
+  useStore,
+} from '../common';
 import GamePathDialog from '../gamePath';
 
 const OptionsInterface = () => {
   const { clearMeta } = useMeta();
-  const { clearGame, game, hasValidSetup } = useGameData();
-  const [dialogOpen, setDialogOpen] = useState(!hasValidSetup);
+  const { clearGame, game, hasValidSetup } = useGameData(); // eslint-disable-line
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { state } = useStore();
 
   const handleClose = useCallback(() => {
     setDialogOpen(false);
@@ -24,10 +33,13 @@ const OptionsInterface = () => {
         <Button onClick={clearGame} variant="contained">
           Clear Game
         </Button>
-        <Button onClick={() => setDialogOpen(dialogOpen)} variant="contained">
+        <Button onClick={() => setDialogOpen(true)} variant="contained">
           Open Dialog
         </Button>
-        <GamePathDialog onClose={handleClose} open={false} />
+        <Button onClick={() => console.log(state)} variant="contained">
+          Log State
+        </Button>
+        <GamePathDialog onClose={handleClose} open={dialogOpen} />
       </Box>
     </Box>
   );

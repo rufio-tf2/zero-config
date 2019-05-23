@@ -36,40 +36,55 @@ const mockState = {
     groups: {
       0: {
         id: 0,
+        itemIds: [0, 1, 2, 3, 4, 5],
         label: 'Options',
+        sortOrder: 0,
       },
       1: {
         id: 1,
+        itemIds: [6, 7],
         label: 'Adv. Options',
+        sortOrder: 1,
       },
     },
     items: {
       0: {
-        groupId: 0,
         id: 0,
-        label: 'Inbox',
+        label: 'Keyboard',
         sortOrder: 0,
       },
       1: {
-        groupId: 0,
         id: 1,
-        label: 'Starred',
+        label: 'Mouse',
         sortOrder: 1,
       },
       2: {
-        groupId: 1,
         id: 2,
-        label: 'Send email',
+        label: 'Audio',
         sortOrder: 2,
       },
       3: {
-        groupId: 1,
         id: 3,
-        label: 'Drafts',
+        label: 'Video',
         sortOrder: 3,
       },
+      4: {
+        id: 4,
+        label: 'Voice',
+        sortOrder: 4,
+      },
+      5: {
+        id: 5,
+        label: 'Multiplayer',
+        sortOrder: 5,
+      },
+      6: {
+        id: 6,
+        label: 'Combat Options',
+        sortOrder: 0,
+      },
     },
-    selectedId: null,
+    selectedId: 0,
   },
   game: {
     fullName: 'Team Fortress 2',
@@ -80,6 +95,7 @@ const mockState = {
 
 export const initialState = {
   drawer: {
+    groups: {},
     items: {},
     sections: {},
     selectedId: null,

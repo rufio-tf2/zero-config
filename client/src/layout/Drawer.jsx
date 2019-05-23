@@ -5,12 +5,13 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import {
   Box,
+  CodeIcon,
   ExpandLessIcon,
   ExpandMoreIcon,
-  FilterListIcon,
+  FormatLineSpacingIcon,
   IconButton,
   identity,
-  keyBy,
+  isEmpty,
   List,
   mapValues,
   stubTrue,
@@ -22,13 +23,13 @@ import {
 } from '../common';
 import { ReactComponent as GameLogo } from '../images/tf2-logo.svg'; // TODO: Get much smaller version
 
-const Section = ({ children, label, open, onClick }) => {
+const Section = ({ children, disabled, label, open, onClick }) => {
   return (
     <React.Fragment>
       <List dense>
-        <List.Item button onClick={onClick}>
+        <List.Item button disabled={disabled} onClick={onClick}>
           <List.ItemText primary={label} />
-          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {!disabled && open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </List.Item>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" dense disablePadding>
@@ -53,7 +54,15 @@ const Drawer = ({ className, paperClasses }) => {
   const { title, version } = useMeta();
   const { sections, selectedId, setDrawerSelectedId } = useDrawer();
   const [sectionStates, setSectionStates] = useState(
-    mapValues(keyBy(sections, 'id'), stubTrue),
+    mapValues(sections, stubTrue),
+  );
+
+  const sectionHasSelected = useCallback(
+    sectionId => {
+      const section = sections[sectionId];
+      return section.items.some(item => item.id === selectedId);
+    },
+    [sections, selectedId],
   );
 
   const someSectionsExpanded = useMemo(
@@ -61,11 +70,15 @@ const Drawer = ({ className, paperClasses }) => {
     [sectionStates],
   );
 
-  console.log('sectionStates', sectionStates);
-
   const handleToggleAllSections = useCallback(() => {
     setSectionStates(mapValues(sectionStates, () => !someSectionsExpanded));
   }, [sectionStates, someSectionsExpanded]);
+
+  const handleCollapseOthers = useCallback(() => {
+    setSectionStates(
+      mapValues(sectionStates, (_, sectionId) => sectionHasSelected(sectionId)),
+    );
+  }, [sectionHasSelected, sectionStates]);
 
   const handleToggleSectionState = useCallback(
     id => {
@@ -98,6 +111,11 @@ const Drawer = ({ className, paperClasses }) => {
         </Box>
       </Box>
       <List.Subheader display="flex" justifyContent="flex-end">
+        <Tooltip enterDelay={500} title="Show Selected">
+          <IconButton onClick={handleCollapseOthers} size="small">
+            <CodeIcon />
+          </IconButton>
+        </Tooltip>
         <Tooltip
           enterDelay={500}
           title={`${someSectionsExpanded ? 'Collapse' : 'Expand'} All`}
@@ -106,14 +124,15 @@ const Drawer = ({ className, paperClasses }) => {
             {someSectionsExpanded ? (
               <VerticalAlignTopIcon />
             ) : (
-              <FilterListIcon />
+              <FormatLineSpacingIcon />
             )}
           </IconButton>
         </Tooltip>
       </List.Subheader>
       <Divider />
-      {sections.map(section => (
+      {Object.values(sections).map(section => (
         <Section
+          disabled={isEmpty(section.items)}
           key={section.label}
           label={section.label}
           onClick={() => handleToggleSectionState(section.id)}

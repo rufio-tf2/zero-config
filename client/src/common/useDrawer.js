@@ -1,39 +1,40 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { setDrawerSelectedId } from './store';
 import useStore from './useStore';
-import { get, groupBy, mapValues } from './util';
+import { isNonNil, keyBy } from './util';
 
 function useDrawer() {
   const { dispatch, state } = useStore();
+  const { groups, items, selectedId } = state.drawer;
 
-  const drawer = useMemo(() => get(state, ['drawer'], {}), [state]);
-  const selectedId = useMemo(() => get(drawer, ['selectedId'], ''), [drawer]);
-  const groupInfo = useMemo(() => get(drawer, ['groups'], ''), [drawer]);
-  const items = useMemo(() => get(drawer, ['items'], ''), [drawer]);
+  const idToItem = useCallback(id => items[id], [items]);
 
-  const orderedItems = useMemo(
-    () => Object.values(items).sort(item => item.sortOrder),
-    [items],
-  );
   const sections = useMemo(() => {
-    const groups = groupBy(orderedItems, item => item.groupId);
+    const sortedGroups = Object.values(groups).sort(group => group.sortOrder);
 
-    return mapValues(groups, (value, key) => ({
-      ...groupInfo[key],
-      items: value,
-    }));
-  }, [groupInfo, orderedItems]);
+    const list = sortedGroups
+      .map(group => ({
+        ...group,
+        items: group.itemIds
+          .map(idToItem)
+          .filter(isNonNil)
+          .sort(item => item.sortOrder),
+      }))
+      .filter(group => group.items);
+
+    return keyBy(list, 'id');
+  }, [groups, idToItem]);
 
   return useMemo(
     () => ({
-      sections: Object.values(sections),
-      selectedId: selectedId || orderedItems[0].id,
+      sections,
+      selectedId,
       setDrawerSelectedId(id) {
         dispatch(setDrawerSelectedId(id));
       },
     }),
-    [dispatch, orderedItems, sections, selectedId],
+    [dispatch, sections, selectedId],
   );
 }
 

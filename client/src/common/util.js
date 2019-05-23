@@ -32,7 +32,27 @@ export const identity = value => value;
 
 export const isArray = value => Array.isArray(value);
 
+export const isObject = value => !isNull(value) && typeof value === 'object';
+
+export const isString = value => typeof value === 'string';
+
+export const isEmpty = value =>
+  isNil(value) ||
+  (isString(value) && value === '') ||
+  (isArray(value) && value.length === 0) ||
+  (isObject(value) && Object.keys(value).length === 0);
+
 export const isSystemProp = propName => MUI_SYSTEM_PROPS.includes(propName);
+
+export const isUndefined = value => value === undefined;
+
+export const isNull = value => value === null;
+
+export const isNil = value => isUndefined(value) || isNull(value);
+
+export const negate = f => (...args) => !f(...args);
+
+export const isNonNil = negate(isNil);
 
 export const mapValues = (obj, iteratee = identity) => {
   const keys = Object.keys(obj);
@@ -45,8 +65,6 @@ export const mapValues = (obj, iteratee = identity) => {
     return accumulator;
   }, {});
 };
-
-export const negate = f => (...args) => !f(...args);
 
 export const noop = () => {};
 
