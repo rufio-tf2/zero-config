@@ -30,11 +30,12 @@ function useDrawer() {
     () => ({
       sections,
       selectedId,
+      selectedOption: items[selectedId],
       setDrawerSelectedId(id) {
         dispatch(setDrawerSelectedId(id));
       },
     }),
-    [dispatch, sections, selectedId],
+    [dispatch, items, sections, selectedId],
   );
 }
 

@@ -5,6 +5,7 @@ import {
   Button,
   GlobalNav,
   Text,
+  useDrawer,
   useGameData,
   useMeta,
   useStore,
@@ -14,8 +15,11 @@ import GamePathDialog from '../gamePath';
 const OptionsInterface = () => {
   const { clearMeta } = useMeta();
   const { clearGame, game, hasValidSetup } = useGameData(); // eslint-disable-line
+  const { selectedOption } = useDrawer();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { state } = useStore();
+
+  console.log('selectedOption', selectedOption);
 
   const handleClose = useCallback(() => {
     setDialogOpen(false);
@@ -23,9 +27,8 @@ const OptionsInterface = () => {
 
   return (
     <Box>
-      <GlobalNav title="Options" />
+      <GlobalNav title={selectedOption.label} />
       <Box p={3}>
-        <Text as="h3">Options</Text>
         <Text>Game path: {game.path}</Text>
         <Button onClick={clearMeta} variant="contained">
           Clear Meta
