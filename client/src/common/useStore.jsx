@@ -29,13 +29,14 @@ function useStore() {
   return useContext(StoreContext);
 }
 
+/* eslint-disable */
 const StoreProvider = props => {
   const [storedState, storeState] = useElectronSettings('state', initialState);
   // Default any properties omitted from the session-storage due to the deny-list.
   const reducerState = {
     ...initialState,
     // Remove any stale storage of keys on the deny-list.
-    ...omit(storedState, STORAGE_DENY_LIST),
+    // ...omit(storedState, STORAGE_DENY_LIST),
   };
 
   const [state, dispatch] = useReducer(

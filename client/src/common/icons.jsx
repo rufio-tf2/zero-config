@@ -7,11 +7,13 @@ import Done from '@material-ui/icons/Done';
 import DonutLarge from '@material-ui/icons/DonutLarge';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import FilterList from '@material-ui/icons/FilterList';
 import GetApp from '@material-ui/icons/GetApp';
 import GroupAdd from '@material-ui/icons/GroupAdd';
 import MoreVert from '@material-ui/icons/MoreVert';
 import RestoreFromTrash from '@material-ui/icons/RestoreFromTrash';
 import Undo from '@material-ui/icons/Undo';
+import VerticalAlignTop from '@material-ui/icons/VerticalAlignTop';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { styled } from '@material-ui/styles';
@@ -25,38 +27,21 @@ const makeIcon = BaseIcon => {
   return StyledIcon;
 };
 
-const AddMembersIcon = makeIcon(GroupAdd);
-const ArrowDropDownIcon = makeIcon(ArrowDropDown);
-const AttachmentIcon = makeIcon(Attachment);
-const CloseIcon = makeIcon(Close);
-const DeleteIcon = makeIcon(Delete);
-const DoneIcon = makeIcon(Done);
-const DonutLargeIcon = makeIcon(DonutLarge);
-const ExpandLessIcon = makeIcon(ExpandLess);
-const ExpandMoreIcon = makeIcon(ExpandMore);
-const DownloadIcon = makeIcon(GetApp);
-const MoreMenuIcon = makeIcon(MoreVert);
-const RestoreIcon = makeIcon(RestoreFromTrash);
-const UndoIcon = makeIcon(Undo);
-const UploadIcon = makeIcon(CloudUpload);
-const VisibilityOffIcon = makeIcon(VisibilityOff);
-const VisibilityOnIcon = makeIcon(Visibility);
-
-export {
-  AddMembersIcon,
-  ArrowDropDownIcon,
-  AttachmentIcon,
-  CloseIcon,
-  DeleteIcon,
-  DoneIcon,
-  DonutLargeIcon,
-  DownloadIcon,
-  ExpandLessIcon,
-  ExpandMoreIcon,
-  MoreMenuIcon,
-  RestoreIcon,
-  UndoIcon,
-  UploadIcon,
-  VisibilityOffIcon,
-  VisibilityOnIcon,
-};
+export const AddMembersIcon = makeIcon(GroupAdd);
+export const ArrowDropDownIcon = makeIcon(ArrowDropDown);
+export const AttachmentIcon = makeIcon(Attachment);
+export const CloseIcon = makeIcon(Close);
+export const DeleteIcon = makeIcon(Delete);
+export const DoneIcon = makeIcon(Done);
+export const DonutLargeIcon = makeIcon(DonutLarge);
+export const ExpandLessIcon = makeIcon(ExpandLess);
+export const ExpandMoreIcon = makeIcon(ExpandMore);
+export const FilterListIcon = makeIcon(FilterList);
+export const DownloadIcon = makeIcon(GetApp);
+export const MoreMenuIcon = makeIcon(MoreVert);
+export const RestoreIcon = makeIcon(RestoreFromTrash);
+export const UndoIcon = makeIcon(Undo);
+export const UploadIcon = makeIcon(CloudUpload);
+export const VerticalAlignTopIcon = makeIcon(VerticalAlignTop);
+export const VisibilityOffIcon = makeIcon(VisibilityOff);
+export const VisibilityOnIcon = makeIcon(Visibility);

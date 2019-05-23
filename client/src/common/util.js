@@ -10,9 +10,41 @@ export const get = (host, path, defaultValue) => {
 export const getComponentDisplayName = Component =>
   Component.displayName || Component.name || 'Component';
 
+export const groupBy = (list, getKey) => {
+  return list.reduce((accumulator, item) => {
+    const key = getKey(item);
+    const group = accumulator[key] || [];
+
+    accumulator[key] = [...group, item];
+
+    return accumulator;
+  }, {});
+};
+
+export const keyBy = (list, key) =>
+  list.reduce((result, item) => {
+    result[item[key]] = item;
+
+    return result;
+  }, {});
+
+export const identity = value => value;
+
 export const isArray = value => Array.isArray(value);
 
 export const isSystemProp = propName => MUI_SYSTEM_PROPS.includes(propName);
+
+export const mapValues = (obj, iteratee = identity) => {
+  const keys = Object.keys(obj);
+
+  return keys.reduce((accumulator, key) => {
+    const value = obj[key];
+
+    accumulator[key] = iteratee(value, key, obj);
+
+    return accumulator;
+  }, {});
+};
 
 export const negate = f => (...args) => !f(...args);
 
@@ -39,6 +71,8 @@ export const partitionObject = (obj, predicate) =>
     },
     [{}, {}],
   );
+
+export const stubTrue = () => true;
 
 export const uuid = a => {
   return a

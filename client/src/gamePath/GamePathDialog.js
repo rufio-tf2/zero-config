@@ -9,8 +9,7 @@ import {
   noop,
   Text,
   TextField,
-  useSetup,
-  useStore,
+  useGameData,
 } from '../common';
 
 const openDirectoryDialog = onSelectDirectory => {
@@ -21,25 +20,20 @@ const openDirectoryDialog = onSelectDirectory => {
 };
 
 const GamePathDialog = ({ open = false, onClose = noop }) => {
-  const { setSetup, setup } = useSetup();
+  const { game, setGamePath } = useGameData();
   const [inputGamePath, setInputGamePath] = useState('');
-  const { state } = useStore();
 
   const handleSetGamePath = useCallback(
     event => {
-      console.log('handleSetGamePath event', event);
       setInputGamePath(event.target.value);
     },
     [setInputGamePath],
   );
 
   const confirmSetup = useCallback(() => {
-    setSetup({
-      ...setup,
-      gamePath: inputGamePath,
-    });
+    setGamePath(inputGamePath);
     onClose();
-  }, [inputGamePath, onClose, setSetup, setup]);
+  }, [inputGamePath, onClose, setGamePath]);
 
   const handleSelectDirectory = fileDirs => {
     const gamePath = fileDirs[0];
@@ -64,7 +58,7 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         justifyContent="space-between"
         pb={0}
       >
-        <Text variant="h6">Select your {state.game.fullName} folder</Text>
+        <Text variant="h6">Select your {game.fullName} folder</Text>
         <IconButton aria-label="Close" onClick={onClose}>
           <CloseIcon />
         </IconButton>
@@ -77,7 +71,7 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
           autoFocus
           fullWidth
           helperText={`(Default Windows) C:\\Program Files (x86)\\Steam\\steamapps\\common\\${
-            state.game.fullName
+            game.fullName
           }`}
           id="game-path"
           label="Click to select your game folder"

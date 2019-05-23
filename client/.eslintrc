@@ -15,7 +15,12 @@
     ],
     "no-unused-vars": [
       "error",
-      { "args": "after-used", "ignoreRestSiblings": true, "vars": "all" }
+      {
+        "args": "after-used",
+        "argsIgnorePattern": "^_$",
+        "ignoreRestSiblings": true,
+        "vars": "all"
+      }
     ],
     "sort-imports": [
       "error",
