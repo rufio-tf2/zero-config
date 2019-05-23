@@ -1,34 +1,10 @@
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { navigate } from '@reach/router';
 import React from 'react';
 
 import Box from './Box';
-import ButtonMenu from './ButtonMenu';
-import IconButton from './IconButton';
 import Text from './Text';
 import { ReactComponent as GameLogo } from './tf2-logo.svg'; // TODO: Get much smaller version
-import Tooltip from './Tooltip';
-
-const GlobalNavIconLink = ({ href, icon: Icon, label }) => (
-  <Tooltip title={label}>
-    <IconButton
-      aria-label={label}
-      color="inherit"
-      onClick={() => navigate(href)}
-    >
-      <Icon />
-    </IconButton>
-  </Tooltip>
-);
-
-const GlobalNavIconMenu = ({ children, icon: Icon, label }) => (
-  <Tooltip title={label}>
-    <ButtonMenu aria-label={label} color="inherit" icon={Icon}>
-      {children}
-    </ButtonMenu>
-  </Tooltip>
-);
 
 const GlobalNav = ({ children, title }) => (
   <AppBar position="static">
@@ -55,9 +31,5 @@ const GlobalNav = ({ children, title }) => (
     </Toolbar>
   </AppBar>
 );
-
-GlobalNav.IconLink = GlobalNavIconLink;
-GlobalNav.IconMenu = GlobalNavIconMenu;
-GlobalNav.IconMenu.Item = ButtonMenu.Item;
 
 export default GlobalNav;

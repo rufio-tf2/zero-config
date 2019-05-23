@@ -17,7 +17,9 @@ const WINDOW_SETTINGS = {
 
 let mainWindow = null;
 
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, dialog } = electron;
+
+// dialog.showOpenDialog({ properties: ['openDirectory'] }, dirPaths => dirPaths);
 
 app.requestSingleInstanceLock();
 app.on('second-instance', (event, argv, cwd) => {

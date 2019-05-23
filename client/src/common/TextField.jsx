@@ -1,4 +1,4 @@
-import TextField from '@material-ui/core/TextField';
+import MuiTextField from '@material-ui/core/TextField';
 import { styled } from '@material-ui/styles';
 import {
   borders,
@@ -10,7 +10,7 @@ import {
   typography,
 } from '@material-ui/system';
 
-const Text = styled(TextField)(
+const TextField = styled(MuiTextField)(
   compose(
     borders,
     display,
@@ -21,4 +21,4 @@ const Text = styled(TextField)(
   ),
 );
 
-export default Text;
+export default TextField;
