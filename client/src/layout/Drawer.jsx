@@ -97,7 +97,6 @@ const Drawer = ({ className, paperClasses }) => {
           </Text>
         </Box>
       </Box>
-      <Divider />
       <List.Subheader display="flex" justifyContent="flex-end">
         <Tooltip
           enterDelay={500}
