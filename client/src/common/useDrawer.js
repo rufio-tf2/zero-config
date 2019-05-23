@@ -16,7 +16,7 @@ function useDrawer() {
     const list = sortedGroups
       .map(group => ({
         ...group,
-        items: group.itemIds
+        items: Array.from(group.itemIds)
           .map(idToItem)
           .filter(isNonNil)
           .sort(item => item.sortOrder),

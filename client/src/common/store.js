@@ -36,49 +36,56 @@ const mockState = {
     groups: {
       0: {
         id: 0,
-        itemIds: [0, 1, 2, 3, 4, 5],
+        itemIds: new Set([0, 1, 2, 3, 4, 5]),
         label: 'Options',
         sortOrder: 0,
       },
       1: {
         id: 1,
-        itemIds: [6, 7],
+        itemIds: new Set([6, 7]),
         label: 'Adv. Options',
         sortOrder: 1,
       },
     },
     items: {
       0: {
+        groupId: 0,
         id: 0,
         label: 'Keyboard',
         sortOrder: 0,
       },
       1: {
+        groupId: 0,
         id: 1,
         label: 'Mouse',
         sortOrder: 1,
       },
       2: {
+        groupId: 0,
         id: 2,
         label: 'Audio',
         sortOrder: 2,
       },
       3: {
+        groupId: 0,
         id: 3,
         label: 'Video',
         sortOrder: 3,
       },
       4: {
+        groupId: 0,
         id: 4,
         label: 'Voice',
         sortOrder: 4,
       },
       5: {
+        groupId: 0,
         id: 5,
         label: 'Multiplayer',
         sortOrder: 5,
       },
       6: {
+        groupId: 1,
         id: 6,
         label: 'Combat Options',
         sortOrder: 0,
@@ -114,10 +121,8 @@ const reducer = produce((draft, action) => {
     case 'drawer/addItem':
       const item = action.payload;
 
-      draft.drawer = {
-        ...draft.drawer,
-        [item.id]: item,
-      };
+      draft.drawer.items[item.id] = item;
+      draft.drawer.groups[item.groupId].itemIds.add(item.id);
       break;
 
     case 'drawer/removeItemById':
