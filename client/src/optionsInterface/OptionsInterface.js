@@ -19,8 +19,6 @@ const OptionsInterface = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { state } = useStore();
 
-  console.log('selectedOption', selectedOption);
-
   const handleClose = useCallback(() => {
     setDialogOpen(false);
   }, [setDialogOpen]);

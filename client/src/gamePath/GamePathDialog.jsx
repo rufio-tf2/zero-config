@@ -1,4 +1,3 @@
-import { remote } from 'electron';
 import React, { useCallback, useState } from 'react';
 
 import {
@@ -7,25 +6,17 @@ import {
   Dialog,
   IconButton,
   noop,
-  Text,
-  TextField,
   useGameData,
 } from '../common';
-
-const openDirectoryDialog = onSelectDirectory => {
-  return remote.dialog.showOpenDialog(
-    { properties: ['openDirectory'] },
-    onSelectDirectory,
-  );
-};
+import GamePath from './GamePath';
 
 const GamePathDialog = ({ open = false, onClose = noop }) => {
   const { game, setGamePath } = useGameData();
   const [inputGamePath, setInputGamePath] = useState('');
 
   const handleSetGamePath = useCallback(
-    event => {
-      setInputGamePath(event.target.value);
+    path => {
+      setInputGamePath(path);
     },
     [setInputGamePath],
   );
@@ -34,11 +25,6 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
     setGamePath(inputGamePath);
     onClose();
   }, [inputGamePath, onClose, setGamePath]);
-
-  const handleSelectDirectory = fileDirs => {
-    const gamePath = fileDirs[0];
-    setInputGamePath(gamePath);
-  };
 
   return (
     <Dialog
@@ -58,7 +44,7 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         justifyContent="space-between"
         pb={0}
       >
-        <Text variant="h6">Select your {game.fullName} folder</Text>
+        <GamePath.Title game={game} />
         <IconButton aria-label="Close" onClick={onClose}>
           <CloseIcon />
         </IconButton>
@@ -67,20 +53,10 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         <Dialog.ContentText>
           This will be your main folder, within steamapps/common
         </Dialog.ContentText>
-        <TextField
-          autoFocus
-          fullWidth
-          helperText={`(Default Windows) C:\\Program Files (x86)\\Steam\\steamapps\\common\\${
-            game.fullName
-          }`}
-          id="game-path"
-          label="Click to select your game folder"
+        <GamePath.Input
+          game={game}
           onChange={handleSetGamePath}
-          onClick={() => openDirectoryDialog(handleSelectDirectory)}
-          readOnly
-          required
           value={inputGamePath}
-          variant="outlined"
         />
       </Dialog.Content>
       <Dialog.Actions>
