@@ -13,7 +13,7 @@ const createAction = (type, payloadCreator) => {
 export const clearStore = createAction('store/clear');
 
 export const addDrawerItem = createAction('drawer/addItem', item => item);
-export const removeItemById = createAction('drawer/removeItemById', id => id);
+export const removeItem = createAction('drawer/removeItem', id => id);
 export const setDrawerItems = createAction('drawer/setItems', items => items);
 export const setDrawerSelectedId = createAction(
   'drawer/setSelectedId',
@@ -119,16 +119,19 @@ export const initialState = {
 const reducer = produce((draft, action) => {
   switch (action.type) {
     case 'drawer/addItem':
-      const item = action.payload;
-
-      draft.drawer.items[item.id] = item;
-      draft.drawer.groups[item.groupId].itemIds.add(item.id);
+      draft.drawer.items[action.payload.id] = action.payload;
+      draft.drawer.groups[action.payload.groupId].itemIds.add(
+        action.payload.id,
+      );
       break;
 
-    case 'drawer/removeItemById':
+    case 'drawer/removeItem':
       draft.drawer.items = omitBy(
         draft.drawer.items,
         item => item.id === action.payload,
+      );
+      draft.drawer.groups[action.payload.groupId].itemIds.delete(
+        action.payload.id,
       );
       break;
 
