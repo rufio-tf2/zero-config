@@ -1,7 +1,5 @@
 import produce from 'immer';
 
-import { omitBy } from './util';
-
 const createAction = (type, payloadCreator) => {
   if (typeof payloadCreator === 'undefined') {
     return () => ({ type });
@@ -11,14 +9,6 @@ const createAction = (type, payloadCreator) => {
 };
 
 export const clearStore = createAction('store/clear');
-
-export const addDrawerItem = createAction('drawer/addItem', item => item);
-export const removeItem = createAction('drawer/removeItem', id => id);
-export const setDrawerItems = createAction('drawer/setItems', items => items);
-export const setDrawerSelectedId = createAction(
-  'drawer/setSelectedId',
-  id => id,
-);
 
 export const clearGame = createAction('game/clear');
 export const setGame = createAction('game/set', game => game);
@@ -32,67 +22,6 @@ export const addToastMessage = createAction('toast/add', message => message);
 export const removeToastMessage = createAction('toast/remove');
 
 const mockState = {
-  drawer: {
-    groups: {
-      0: {
-        id: 0,
-        itemIds: new Set([0, 1, 2, 3, 4, 5]),
-        label: 'Options',
-        sortOrder: 0,
-      },
-      1: {
-        id: 1,
-        itemIds: new Set([6, 7]),
-        label: 'Adv. Options',
-        sortOrder: 1,
-      },
-    },
-    items: {
-      0: {
-        groupId: 0,
-        id: 0,
-        label: 'Keyboard',
-        sortOrder: 0,
-      },
-      1: {
-        groupId: 0,
-        id: 1,
-        label: 'Mouse',
-        sortOrder: 1,
-      },
-      2: {
-        groupId: 0,
-        id: 2,
-        label: 'Audio',
-        sortOrder: 2,
-      },
-      3: {
-        groupId: 0,
-        id: 3,
-        label: 'Video',
-        sortOrder: 3,
-      },
-      4: {
-        groupId: 0,
-        id: 4,
-        label: 'Voice',
-        sortOrder: 4,
-      },
-      5: {
-        groupId: 0,
-        id: 5,
-        label: 'Multiplayer',
-        sortOrder: 5,
-      },
-      6: {
-        groupId: 1,
-        id: 6,
-        label: 'Combat Options',
-        sortOrder: 0,
-      },
-    },
-    selectedId: 0,
-  },
   game: {
     fullName: 'Team Fortress 2',
     path: null,
@@ -118,31 +47,6 @@ export const initialState = {
 
 const reducer = produce((draft, action) => {
   switch (action.type) {
-    case 'drawer/addItem':
-      draft.drawer.items[action.payload.id] = action.payload;
-      draft.drawer.groups[action.payload.groupId].itemIds.add(
-        action.payload.id,
-      );
-      break;
-
-    case 'drawer/removeItem':
-      draft.drawer.items = omitBy(
-        draft.drawer.items,
-        item => item.id === action.payload,
-      );
-      draft.drawer.groups[action.payload.groupId].itemIds.delete(
-        action.payload.id,
-      );
-      break;
-
-    case 'drawer/setItems':
-      draft.drawer.items = action.payload;
-      break;
-
-    case 'drawer/setSelectedId':
-      draft.drawer.selectedId = action.payload;
-      break;
-
     case 'meta/clear':
       draft.meta = {};
       break;

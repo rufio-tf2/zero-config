@@ -1,5 +1,5 @@
 import { remote } from 'electron';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import { Box, Text, TextField } from '../common';
 
@@ -17,25 +17,46 @@ const GamePathTitle = ({ game }) => (
 const GamePath = props => <Box {...props} />;
 
 const GamePathInput = ({ game, onChange, value }) => {
+  const [isInputLocked, setInputLocked] = useState(false);
+  const inputEl = useRef(null);
+
   const handleSelectDirectory = useCallback(
     fileDirs => {
-      const gamePath = fileDirs[0];
-      onChange(gamePath);
+      try {
+        if (fileDirs) {
+          const gamePath = fileDirs[0];
+          onChange(gamePath);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setInputLocked(false);
+        inputEl.current.focus();
+      }
     },
     [onChange],
   );
 
+  const handleInputClick = useCallback(() => {
+    if (!isInputLocked) {
+      setInputLocked(true);
+      openDirectoryDialog(handleSelectDirectory);
+    }
+  }, [handleSelectDirectory, isInputLocked]);
+
   return (
     <TextField
       autoFocus
+      disabled={isInputLocked}
       fullWidth
       helperText={`(Default Windows) C:\\Program Files (x86)\\Steam\\steamapps\\common\\${
         game.fullName
       }`}
       id="game-path"
+      inputRef={inputEl}
       label="Click to select your game folder"
       onChange={onChange}
-      onClick={() => openDirectoryDialog(handleSelectDirectory)}
+      onClick={handleInputClick}
       readOnly
       required
       value={value}

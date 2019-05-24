@@ -1,24 +1,47 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { LocationProvider, Redirect, Router } from '@reach/router';
 import React from 'react';
 
-import { StoreProvider } from '../common';
-import Layout from '../layout';
+import { StoreProvider, useRouter } from '../common';
+import BaseLayout from './Layout';
 import theme from './theme';
 import ToastMessages from './ToastMessages';
 
-const OptionsInterface = React.lazy(() => import('../optionsInterface'));
+const KeyboardOptions = React.lazy(() => import('../keyboardOptions'));
+const MouseOptions = React.lazy(() => import('../mouseOptions'));
+const DefaultPage = React.lazy(() => import('./DefaultPage'));
 
-const App = () => (
-  <StoreProvider>
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <OptionsInterface />
-      </Layout>
-      <ToastMessages />
-    </MuiThemeProvider>
-  </StoreProvider>
-);
+const Route = ({
+  component: Component,
+  layout: Layout = BaseLayout,
+  ...props
+}) => {
+  return (
+    <Layout>
+      <Component {...props} />
+    </Layout>
+  );
+};
+
+const App = () => {
+  const { history } = useRouter();
+  return (
+    <StoreProvider>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <LocationProvider history={history}>
+          <Router>
+            <Redirect from="/" noThrow to="/keyboard" />
+            <Route component={KeyboardOptions} path="/keyboard" />
+            <Route component={MouseOptions} path="/mouse" />
+            <Route component={DefaultPage} default path="/404" />
+          </Router>
+        </LocationProvider>
+        <ToastMessages />
+      </MuiThemeProvider>
+    </StoreProvider>
+  );
+};
 
 export default App;

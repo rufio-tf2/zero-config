@@ -1,3 +1,4 @@
+import { navigate } from '@reach/router';
 import React, { useCallback, useState } from 'react';
 
 import {
@@ -5,17 +6,17 @@ import {
   Button,
   GlobalNav,
   Text,
-  useDrawer,
   useGameData,
   useMeta,
+  useRouter,
   useStore,
 } from '../common';
-import GamePathDialog from '../gamePath';
+import { GamePathDialog } from '../gamePath';
 
-const OptionsInterface = () => {
+const KeyboardOptions = () => {
   const { clearMeta } = useMeta();
   const { clearGame, game, hasValidSetup } = useGameData(); // eslint-disable-line
-  const { selectedOption } = useDrawer();
+  const { history, source } = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { state } = useStore();
 
@@ -25,7 +26,7 @@ const OptionsInterface = () => {
 
   return (
     <Box>
-      <GlobalNav title={selectedOption.label} />
+      <GlobalNav title="Keyboard" />
       <Box p={3}>
         <Text>Game path: {game.path}</Text>
         <Button onClick={clearMeta} variant="contained">
@@ -37,8 +38,20 @@ const OptionsInterface = () => {
         <Button onClick={() => setDialogOpen(true)} variant="contained">
           Open Dialog
         </Button>
+        <Button
+          onClick={() => {
+            console.log('Router', history);
+            console.log('source', source);
+          }}
+          variant="contained"
+        >
+          Log Router
+        </Button>
         <Button onClick={() => console.log(state)} variant="contained">
           Log State
+        </Button>
+        <Button onClick={() => navigate('/mouse')} variant="contained">
+          Navigate Mouse
         </Button>
         <GamePathDialog onClose={handleClose} open={dialogOpen} />
       </Box>
@@ -46,4 +59,4 @@ const OptionsInterface = () => {
   );
 };
 
-export default OptionsInterface;
+export default KeyboardOptions;

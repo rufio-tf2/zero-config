@@ -14,16 +14,16 @@ import {
   isEmpty,
   List,
   mapValues,
-  stubTrue,
   Text,
   Tooltip,
-  useDrawer,
   useMeta,
+  useRouter,
   VerticalAlignTopIcon,
 } from '../common';
 import { ReactComponent as GameLogo } from '../images/tf2-logo.svg'; // TODO: Get much smaller version
+import routes from './routes';
 
-const Section = ({ children, disabled, label, open, onClick }) => {
+const DrawerSection = ({ children, disabled, label, open, onClick }) => {
   return (
     <React.Fragment>
       <List dense>
@@ -42,7 +42,7 @@ const Section = ({ children, disabled, label, open, onClick }) => {
   );
 };
 
-const Item = ({ label, onClick, selected }) => {
+const DrawerItem = ({ label, selected, onClick }) => {
   return (
     <List.Item button onClick={onClick} pl={4} selected={selected}>
       <List.ItemText primary={label} />
@@ -52,42 +52,42 @@ const Item = ({ label, onClick, selected }) => {
 
 const Drawer = ({ className, paperClasses }) => {
   const { title, version } = useMeta();
-  const { sections, selectedId, setDrawerSelectedId } = useDrawer();
-  const [sectionStates, setSectionStates] = useState(
-    mapValues(sections, stubTrue),
+  const { location, navigate } = useRouter();
+  const [openSections, setOpenSections] = useState(
+    routes.reduce((acc, section) => ({ ...acc, [section.id]: true }), {}),
   );
 
-  const sectionHasSelected = useCallback(
+  const isCurrentSection = useCallback(
     sectionId => {
-      const section = sections[sectionId];
-      return section.items.some(item => item.id === selectedId);
+      const section = routes[sectionId];
+      return section.routes.some(route => route.path === location.pathname);
     },
-    [sections, selectedId],
+    [location.pathname],
   );
 
   const someSectionsExpanded = useMemo(
-    () => Object.values(sectionStates).some(identity),
-    [sectionStates],
+    () => Object.values(openSections).some(identity),
+    [openSections],
   );
 
   const handleToggleAllSections = useCallback(() => {
-    setSectionStates(mapValues(sectionStates, () => !someSectionsExpanded));
-  }, [sectionStates, someSectionsExpanded]);
+    setOpenSections(mapValues(openSections, () => !someSectionsExpanded));
+  }, [openSections, someSectionsExpanded]);
 
   const handleCollapseOthers = useCallback(() => {
-    setSectionStates(
-      mapValues(sectionStates, (_, sectionId) => sectionHasSelected(sectionId)),
+    setOpenSections(
+      mapValues(openSections, (_, sectionId) => isCurrentSection(sectionId)),
     );
-  }, [sectionHasSelected, sectionStates]);
+  }, [isCurrentSection, openSections]);
 
   const handleToggleSectionState = useCallback(
     id => {
-      setSectionStates({
-        ...sectionStates,
-        [id]: !sectionStates[id],
+      setOpenSections({
+        ...openSections,
+        [id]: !openSections[id],
       });
     },
-    [sectionStates],
+    [openSections],
   );
 
   return (
@@ -131,24 +131,23 @@ const Drawer = ({ className, paperClasses }) => {
         </Tooltip>
       </List.Subheader>
       <Divider />
-      {Object.values(sections).map(section => (
-        <Section
-          disabled={isEmpty(section.items)}
-          key={section.label}
+      {routes.map(section => (
+        <DrawerSection
+          disabled={isEmpty(section.routes)}
+          key={section.id}
           label={section.label}
           onClick={() => handleToggleSectionState(section.id)}
-          open={sectionStates[section.id]}
-          section={section}
+          open={openSections[section.id]}
         >
-          {section.items.map(item => (
-            <Item
-              key={item.id}
-              label={item.label}
-              onClick={() => setDrawerSelectedId(item.id)}
-              selected={item.id === selectedId}
+          {section.routes.map(route => (
+            <DrawerItem
+              key={route.id}
+              label={route.label}
+              onClick={() => navigate(route.path)}
+              selected={route.path === location.pathname}
             />
           ))}
-        </Section>
+        </DrawerSection>
       ))}
     </MuiDrawer>
   );

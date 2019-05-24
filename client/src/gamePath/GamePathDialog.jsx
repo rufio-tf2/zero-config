@@ -60,12 +60,14 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         />
       </Dialog.Content>
       <Dialog.Actions>
+        <Button aria-label="Setup Later" onClick={onClose} variant="contained">
+          I'll Do It Later
+        </Button>
         <Button
           aria-label="Finish Setup"
           color="primary"
           disabled={!inputGamePath}
           onClick={confirmSetup}
-          size="large"
           variant="contained"
         >
           Confirm
