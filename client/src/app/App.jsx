@@ -4,9 +4,9 @@ import { LocationProvider, Redirect, Router } from '@reach/router';
 import React from 'react';
 
 import { StoreProvider, useRouter } from '../common';
+import Global from './Global';
 import BaseLayout from './Layout';
 import theme from './theme';
-import ToastMessages from './ToastMessages';
 
 const KeyboardOptions = React.lazy(() => import('../keyboardOptions'));
 const MouseOptions = React.lazy(() => import('../mouseOptions'));
@@ -26,6 +26,7 @@ const Route = ({
 
 const App = () => {
   const { history } = useRouter();
+
   return (
     <StoreProvider>
       <MuiThemeProvider theme={theme}>
@@ -38,7 +39,7 @@ const App = () => {
             <Route component={DefaultPage} default path="/404" />
           </Router>
         </LocationProvider>
-        <ToastMessages />
+        <Global />
       </MuiThemeProvider>
     </StoreProvider>
   );

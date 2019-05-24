@@ -1,32 +1,43 @@
+import AppBar from '@material-ui/core/AppBar';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import { navigate } from '@reach/router';
 import React, { useCallback, useState } from 'react';
 
 import {
   Box,
   Button,
-  GlobalNav,
+  // Grid,
+  // Paper,
   Text,
   useGameData,
   useMeta,
   useRouter,
   useStore,
 } from '../common';
-import { GamePathDialog } from '../gamePath';
 
 const KeyboardOptions = () => {
   const { clearMeta } = useMeta();
-  const { clearGame, game, hasValidSetup } = useGameData(); // eslint-disable-line
+  const { clearGame, game } = useGameData();
   const { history, source } = useRouter();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
   const { state } = useStore();
 
-  const handleClose = useCallback(() => {
-    setDialogOpen(false);
-  }, [setDialogOpen]);
+  const handleChangeTab = useCallback((event, newIndex) => {
+    setTabIndex(newIndex);
+  }, []);
 
   return (
     <Box>
-      <GlobalNav title="Keyboard" />
+      <AppBar position="static">
+        <Tabs onChange={handleChangeTab} value={tabIndex}>
+          <Tab label="Communication" />
+          <Tab label="Team Fortress" />
+          <Tab label="Class-Specific Skills" />
+          <Tab label="Combat" />
+          <Tab label="Miscellaneous" />
+        </Tabs>
+      </AppBar>
       <Box p={3}>
         <Text>Game path: {game.path}</Text>
         <Button onClick={clearMeta} variant="contained">
@@ -34,9 +45,6 @@ const KeyboardOptions = () => {
         </Button>
         <Button onClick={clearGame} variant="contained">
           Clear Game
-        </Button>
-        <Button onClick={() => setDialogOpen(true)} variant="contained">
-          Open Dialog
         </Button>
         <Button
           onClick={() => {
@@ -53,7 +61,6 @@ const KeyboardOptions = () => {
         <Button onClick={() => navigate('/mouse')} variant="contained">
           Navigate Mouse
         </Button>
-        <GamePathDialog onClose={handleClose} open={dialogOpen} />
       </Box>
     </Box>
   );

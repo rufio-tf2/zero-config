@@ -7,8 +7,10 @@ const path = require('path');
 const WINDOW_SETTINGS = {
   height: 672,
   width: 1087,
-  minWidth: 320,
-  minHeight: 240,
+  minWidth: 640,
+  minHeight: 480,
+  center: true,
+  show: false, // Show after maximized to avoid flash
   webPreferences: {
     devTools: true,
     nodeIntegration: true,
@@ -46,12 +48,17 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   }
 
+  // Hide until maximized to avoid flash
+  mainWindow.maximize();
+  mainWindow.show();
+
   mainWindow.on('closed', () => (mainWindow = null));
 }
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
+  console.log('@@ELECTRON: window-all-closed');
   if (process.platform !== 'darwin') {
     app.quit();
   }
