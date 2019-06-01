@@ -6,7 +6,7 @@ import ToastMessages from './ToastMessages';
 
 const Global = () => {
   const { hasValidSetup } = useGameData(); // eslint-disable-line no-unused-vars
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
     setDialogOpen(false);
@@ -14,7 +14,7 @@ const Global = () => {
 
   return (
     <>
-      <GamePathDialog onClose={handleCloseDialog} open={dialogOpen} />
+      <GamePathDialog onClose={handleCloseDialog} open={isDialogOpen} />
       <ToastMessages />
     </>
   );

@@ -8,9 +8,10 @@ import Global from './Global';
 import BaseLayout from './Layout';
 import theme from './theme';
 
+const Base = React.lazy(() => import('../base'));
+const DefaultPage = React.lazy(() => import('./DefaultPage'));
 const KeyboardOptions = React.lazy(() => import('../keyboardOptions'));
 const MouseOptions = React.lazy(() => import('../mouseOptions'));
-const DefaultPage = React.lazy(() => import('./DefaultPage'));
 
 const Route = ({
   component: Component,
@@ -33,7 +34,8 @@ const App = () => {
         <CssBaseline />
         <LocationProvider history={history}>
           <Router>
-            <Redirect from="/" noThrow to="/keyboard" />
+            <Redirect from="/" noThrow to="/base" />
+            <Route component={Base} path="/base" />
             <Route component={KeyboardOptions} path="/keyboard" />
             <Route component={MouseOptions} path="/mouse" />
             <Route component={DefaultPage} default path="/404" />
