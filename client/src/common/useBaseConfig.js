@@ -1,4 +1,3 @@
-// import download from 'download';
 import fs from 'fs-extra';
 import path from 'path';
 import { useCallback, useMemo } from 'react';
@@ -11,7 +10,7 @@ const repoName = 'skeletor-config';
 // const ZIP_NAME = 'base-config.zip';
 const OUTPUT_NAME = 'zero-config';
 
-const uri = 'https://github.com/rufio-tf2/skeletor-config/tarball/master';
+// const uri = 'https://github.com/rufio-tf2/skeletor-config/tarball/master';
 
 const BASE_CONFIG_URL = `https://github.com/${GITHUB_USER}/${repoName}/archive/master.zip`;
 
@@ -22,9 +21,9 @@ const useBaseConfig = () => {
     return game.path && path.join(game.path, 'tf/custom/');
   }, [game.path]);
 
-  const CONFIG_TARGET = useMemo(() => {
-    return CUSTOM_FOLDER && path.join(CUSTOM_FOLDER, OUTPUT_NAME);
-  }, [CUSTOM_FOLDER]);
+  // const CONFIG_TARGET = useMemo(() => {
+  //   return CUSTOM_FOLDER && path.join(CUSTOM_FOLDER, OUTPUT_NAME);
+  // }, [CUSTOM_FOLDER]);
 
   const installBaseConfig = useCallback(() => {
     return CUSTOM_FOLDER
