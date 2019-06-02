@@ -8,7 +8,7 @@ import { GamePathDialog } from '../gamePath';
 
 const Base = () => {
   const { installBaseConfig } = useBaseConfig();
-  const { game, hasValidSetup } = useGameData();
+  const { game } = useGameData();
   const [tabIndex, setTabIndex] = useState(0);
   const [isDialogOpen, setDialogOpen] = useState(false);
 

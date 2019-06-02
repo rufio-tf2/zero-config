@@ -7,12 +7,13 @@ import download from './download';
 import useGameData from './useGameData';
 
 const GITHUB_USER = 'rufio-tf2';
-const REPO_NAME = 'skeletor-config';
+const repoName = 'skeletor-config';
 // const ZIP_NAME = 'base-config.zip';
 const OUTPUT_NAME = 'zero-config';
 
-const uri = 'https://github.com/rufio-tf2/skeletor-config/archive/master.zip';
-const BASE_CONFIG_URL = `https://github.com/${GITHUB_USER}/${REPO_NAME}/archive/master.zip`;
+const uri = 'https://github.com/rufio-tf2/skeletor-config/tarball/master';
+
+const BASE_CONFIG_URL = `https://github.com/${GITHUB_USER}/${repoName}/archive/master.zip`;
 
 const useBaseConfig = () => {
   const { game } = useGameData();
@@ -28,8 +29,10 @@ const useBaseConfig = () => {
   const installBaseConfig = useCallback(() => {
     return CUSTOM_FOLDER
       ? fs.ensureDir(CUSTOM_FOLDER).then(() => {
-          return download(BASE_CONFIG_URL, CONFIG_TARGET, {
+          return download(BASE_CONFIG_URL, CUSTOM_FOLDER, {
             extract: true,
+            filename: OUTPUT_NAME,
+            repoName: `${repoName}-master/`,
           })
             .then(() => {
               console.log('done!');
@@ -39,7 +42,7 @@ const useBaseConfig = () => {
             });
         })
       : null;
-  }, [CONFIG_TARGET, CUSTOM_FOLDER]);
+  }, [CUSTOM_FOLDER]);
 
   return useMemo(
     () => ({

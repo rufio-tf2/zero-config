@@ -7,6 +7,10 @@ export const get = (host, path, defaultValue) => {
   return value === undefined ? defaultValue : value;
 };
 
+export const first = list => {
+  return get(list, [0]);
+};
+
 export const getComponentDisplayName = Component =>
   Component.displayName || Component.name || 'Component';
 

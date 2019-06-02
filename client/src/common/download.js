@@ -1,79 +1,84 @@
-import decompress from 'decompress';
+import AdmZip from 'adm-zip';
+import contentDisposition from 'content-disposition';
+import extName from 'ext-name';
+import fileType from 'file-type';
 import fs from 'fs-extra';
+import got from 'got';
 import http from 'http';
 import https from 'https';
 import path from 'path';
+import tempy from 'tempy';
 import url from 'url';
+
+import { get } from './util';
+
+const getAgent = protocol =>
+  protocol === 'https' ? new https.Agent() : new http.Agent();
+
+const getFilenameFromHeader = ({ headers }) => {
+  const header = get(headers, ['content-disposition']);
+
+  if (!header) return null;
+
+  const { parameters } = contentDisposition.parse(header);
+
+  return get(parameters, ['filename']);
+};
+
+const getExtFromMime = headers => {
+  const header = get(headers, ['content-type']);
+  const [headerInfo] = extName.mime(header);
+
+  return headerInfo ? get(headerInfo, ['ext']) : null;
+};
+
+const addExtToFilename = ({ filename, headers }, data) => {
+  const { ext } = data ? fileType(data) : {};
+  const extension = ext || getExtFromMime(headers);
+
+  return extension || `${filename}.${extension}`;
+};
+
+const getFilenameFromPath = (response, data) => {
+  const { requestUrl } = response;
+  const { pathname } = url.parse(requestUrl);
+
+  const filename = path.basename(pathname);
+
+  return path.extname(filename) ? filename : addExtToFilename(response, data);
+};
+
+const getFilename = (res, data) => {
+  return getFilenameFromHeader(res) || getFilenameFromPath(res, data) || null;
+};
 
 const getProtocolFromUri = uri => {
   const { protocol } = url.parse(uri);
 
-  if (protocol) {
-    return protocol.slice(0, -1);
-  }
-
-  return null;
+  return protocol ? protocol.slice(0, -1) : null;
 };
 
-const getResponse = (url, file) => {
-  return new Promise((resolve, reject) => {
-    const requester = url.startsWith('https:') ? https : http;
-    var request = requester.get(url, response => {
-      if (response.statusCode === 200) {
-        resolve(response);
-      } else if (
-        [301, 302].indexOf(response.statusCode) !== -1 &&
-        response.headers.location
-      ) {
-        requester.get(response.headers.location, response => resolve(response));
-      } else {
-        reject(
-          `Server responded with ${response.statusCode}: ${
-            response.statusMessage
-          }`,
-        );
-      }
-    });
+const download = async (uri, output, options) => {
+  const { encoding = 'buffer', extract, repoName } = options;
 
-    if (file) {
-      request.on('error', err => {
-        file.close();
-        fs.unlink(file.path, () => {});
-        reject(err.message);
-      });
-    }
+  const zipTarget = tempy.file({ name: 'master.zip ' });
+
+  const filename = options.filename || 'tmp';
+  const outputFilepath = path.join(output, filename);
+
+  return new Promise((resolve, reject) => {
+    const readStream = got.stream(uri);
+    const writeStream = fs.createWriteStream(zipTarget);
+
+    return readStream.pipe(writeStream).on('finish', error => {
+      if (error) return reject(error);
+
+      const zip = new AdmZip(zipTarget);
+
+      zip.extractEntryTo(repoName, outputFilepath, false, true);
+      return resolve();
+    });
   });
 };
-
-const download = (uri, output, { extract }) => {
-  const protocol = getProtocolFromUri(uri);
-};
-
-// const download = async (url, dest, { extract }) => {
-//   return async (resolve, reject) => {
-//     const file = fs.createWriteStream(dest);
-
-//     const response = await getResponse(url, file);
-
-//     if (extract) {
-//       decompress(response, path.dirname(dest)).then(files => {
-//         console.log('decompressed files', files);
-//         response.pipe(files);
-//       });
-//     } else {
-//       response.pipe(file);
-//     }
-
-//     file.on('finish', () => {
-//       resolve();
-//     });
-
-//     file.on('error', err => {
-//       file.close();
-//       fs.unlink(dest, () => {});
-//       reject(err.message);
-//     });
-//   };
-// };
 
 export default download;
