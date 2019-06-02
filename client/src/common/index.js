@@ -16,6 +16,7 @@ export { default as Tooltip } from './Tooltip';
 export { default as useAsyncCall } from './useAsyncCall';
 export { default as useBaseConfig } from './useBaseConfig';
 export { default as useGameData } from './useGameData';
+export { default as useGitHub } from './useGitHub';
 export { default as useMeta } from './useMeta';
 export { default as useRouter } from './useRouter';
 export { default as usePastDelay } from './usePastDelay';
