@@ -38,8 +38,10 @@
   },
   "scripts": {
     "build": "rescripts build",
-    "dev": "yarn electron-dev",
-    "electron-dev": "concurrently \"SET BROWSER=none&&yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "wdev": "yarn electron-dev-windows",
+    "mdev": "yarn electron-dev-mac",
+    "electron-dev-mac": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-dev-windows": "concurrently \"SET BROWSER=none&&yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron-pack": "build -w",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
