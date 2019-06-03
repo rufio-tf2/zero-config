@@ -5,18 +5,36 @@ import { useCallback } from 'react';
 import tempy from 'tempy';
 
 import download from './download';
+import { get } from './util';
 
 const GH_HOSTNAME = 'github.com';
+
+// https://github.com/rufio-tf2/starter-config/archive/v1.0.0.zip
+
+function getBranchName(rest) {
+  const branchDesignatorIndex = rest.findIndex(path =>
+    ['tree', 'blob'].includes(path),
+  );
+
+  return branchDesignatorIndex !== -1
+    ? get(rest, [branchDesignatorIndex + 1]) // Branch name follows designator
+    : undefined;
+}
 
 function parseGitHubPath(pathname) {
   const [username, repository, ...rest] = pathname.split('/').filter(v => !!v);
 
-  const branchIndex =
-    rest.findIndex(pathValue => pathValue === 'tree' || pathValue === 'blob') +
-    1;
+  const branch = getBranchName(rest);
+
+  const archive = rest.includes('archive')
+    ? pathname
+    : branch
+    ? `${origin}/${username}/${repository}/archive/${branch}.zip`
+    : new Error(`Couldn't construct \`.zip\` archive URL from: ${pathname}`);
 
   return {
-    branch: rest[branchIndex],
+    archive,
+    branch,
     repository,
     username,
   };
@@ -26,15 +44,18 @@ function parseGitHubUri(uri) {
   const { hostname, origin, pathname, protocol } = new URL(uri);
 
   if (hostname !== GH_HOSTNAME) {
-    throw Error(`That url doesn't seem to be a GitHub link.`);
+    throw Error(
+      `${uri} doesn't seem to be a GitHub link.`,
+      `Received: ${hostname} but expected ${GH_HOSTNAME}`,
+    );
   }
 
-  const { branch = 'master', repository, username } = parseGitHubPath(pathname);
-
-  const archiveUrl = `${origin}/${username}/${repository}/archive/${branch}.zip`;
+  const { archive, branch = 'master', repository, username } = parseGitHubPath(
+    pathname,
+  );
 
   return {
-    archiveUrl,
+    archive,
     branch,
     origin,
     protocol: protocol.slice(0, -1),
@@ -45,13 +66,13 @@ function parseGitHubUri(uri) {
 
 const useGitHub = () => {
   const downloadRepo = useCallback((uri, outputDir, options = {}) => {
-    const { archiveUrl, branch, repository } = parseGitHubUri(uri);
+    const { archive, branch, repository } = parseGitHubUri(uri);
     const { givenName = repository } = options;
 
     const temporaryZip = tempy.file({ name: 'zero-config-tmp.zip' });
     const defaultZipName = `${repository}-${branch}/`;
 
-    return download(archiveUrl, temporaryZip).then(() => {
+    return download(archive, temporaryZip).then(() => {
       const zip = new AdmZip(temporaryZip);
 
       zip.extractAllTo(outputDir, true);
