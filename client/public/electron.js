@@ -14,6 +14,7 @@ const WINDOW_SETTINGS = {
   webPreferences: {
     devTools: true,
     nodeIntegration: true,
+    // webSecurity: false,
   },
 };
 

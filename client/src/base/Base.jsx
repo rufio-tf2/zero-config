@@ -3,7 +3,14 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React, { useCallback, useState } from 'react';
 
-import { Box, Button, Text, useBaseConfig, useGameData } from '../common';
+import {
+  Box,
+  Button,
+  Text,
+  useBaseConfig,
+  useGameData,
+  useToast,
+} from '../common';
 import { GamePathDialog } from '../gamePath';
 
 const Base = () => {
@@ -11,6 +18,7 @@ const Base = () => {
   const { game } = useGameData();
   const [tabIndex, setTabIndex] = useState(0);
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const { showMessage } = useToast();
 
   const handleChangeTab = useCallback((event, newIndex) => {
     setTabIndex(newIndex);
@@ -25,9 +33,10 @@ const Base = () => {
   }, []);
 
   const handleInstall = useCallback(() => {
-    const result = installBaseConfig();
-    console.log('result', result);
-  }, [installBaseConfig]);
+    installBaseConfig().then(() => {
+      showMessage('Base config installed.');
+    });
+  }, [installBaseConfig, showMessage]);
 
   return (
     <Box>

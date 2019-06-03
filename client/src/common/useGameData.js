@@ -1,3 +1,4 @@
+import path from 'path';
 import { useMemo } from 'react';
 
 import { clearGame, clearGamePath, setGame, setGamePath } from './store';
@@ -10,6 +11,12 @@ function useGameData() {
   const { dispatch, state } = useStore();
 
   const game = useMemo(() => get(state, ['game'], {}), [state]);
+
+  const customFolderPath = useMemo(() => {
+    const gamePath = get(game, ['path'], '');
+    return path.join(gamePath, 'tf/custom');
+  }, [game]);
+
   const hasValidSetup = useMemo(() => isValidSetup(game), [game]);
 
   return useMemo(
@@ -20,6 +27,7 @@ function useGameData() {
       clearGamePath() {
         dispatch(clearGamePath());
       },
+      customFolderPath,
       game,
       hasValidSetup,
       setGame(gameData) {
@@ -29,7 +37,7 @@ function useGameData() {
         dispatch(setGamePath(path));
       },
     }),
-    [dispatch, game, hasValidSetup],
+    [customFolderPath, dispatch, game, hasValidSetup],
   );
 }
 

@@ -1,9 +1,10 @@
 import AdmZip from 'adm-zip';
 import fs from 'fs-extra';
-import got from 'got';
 import path from 'path';
 import { useCallback } from 'react';
 import tempy from 'tempy';
+
+import download from './download';
 
 const GH_HOSTNAME = 'github.com';
 
@@ -50,24 +51,19 @@ const useGitHub = () => {
     const temporaryZip = tempy.file({ name: 'zero-config-tmp.zip' });
     const defaultZipName = `${repository}-${branch}/`;
 
-    return new Promise((resolve, reject) => {
-      const readStream = got.stream(archiveUrl);
-      const writeStream = fs.createWriteStream(temporaryZip);
+    return download(archiveUrl, temporaryZip).then(() => {
+      const zip = new AdmZip(temporaryZip);
 
-      return readStream.pipe(writeStream).on('finish', error => {
-        if (error) return reject(error);
+      zip.extractAllTo(outputDir, true);
 
-        const zip = new AdmZip(temporaryZip);
+      const oldPath = path.join(outputDir, defaultZipName);
+      const newPath = path.join(outputDir, givenName);
 
-        zip.extractAllTo(outputDir, true);
-
-        fs.renameSync(
-          path.join(outputDir, defaultZipName),
-          path.join(outputDir, givenName),
-        );
-
-        return resolve();
-      });
+      const existsAlready = !!fs.statSync(newPath);
+      if (existsAlready) {
+      } else {
+        fs.renameSync(oldPath, newPath);
+      }
     });
   }, []);
 
