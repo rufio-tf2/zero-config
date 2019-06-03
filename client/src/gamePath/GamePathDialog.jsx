@@ -55,6 +55,7 @@ const GamePathDialog = ({ open = false, onClose = noop }) => {
         </Dialog.ContentText>
         <GamePath.Input
           game={game}
+          label="Click to select your game folder"
           onChange={handleSetGamePath}
           value={inputGamePath}
         />

@@ -11,26 +11,24 @@ import {
   useGameData,
   useToast,
 } from '../common';
-import { GamePathDialog } from '../gamePath';
+import GamePath from '../gamePath';
 
 const Base = () => {
   const { installBaseConfig } = useBaseConfig();
-  const { game } = useGameData();
+  const { game, setGamePath } = useGameData();
   const [tabIndex, setTabIndex] = useState(0);
-  const [isDialogOpen, setDialogOpen] = useState(false);
   const { showMessage } = useToast();
 
   const handleChangeTab = useCallback((event, newIndex) => {
     setTabIndex(newIndex);
   }, []);
 
-  const handleOpenDialog = useCallback(() => {
-    setDialogOpen(true);
-  }, []);
-
-  const handleCloseDialog = useCallback(() => {
-    setDialogOpen(false);
-  }, []);
+  const handleSetGamePath = useCallback(
+    path => {
+      setGamePath(path);
+    },
+    [setGamePath],
+  );
 
   const handleInstall = useCallback(() => {
     installBaseConfig().then(() => {
@@ -46,18 +44,27 @@ const Base = () => {
         </Tabs>
       </AppBar>
       <Box p={3}>
-        <Text>Game path: {game.path}</Text>
-        <Button onClick={handleOpenDialog} variant="contained">
-          Set Path
-        </Button>
+        <Box mb={1}>
+          <GamePath.Title game={game} />
+          <Text mb={1}>
+            This will be your main folder, within steamapps/common
+          </Text>
+          <GamePath.Input
+            game={game}
+            onChange={handleSetGamePath}
+            placeholder="Click to select your game folder"
+            value={game.path || ''}
+          />
+        </Box>
         <Button
+          color="primary"
           disabled={!game.path}
+          ml={1}
           onClick={handleInstall}
           variant="contained"
         >
           Install
         </Button>
-        <GamePathDialog onClose={handleCloseDialog} open={isDialogOpen} />
       </Box>
     </Box>
   );

@@ -16,7 +16,7 @@ const GamePathTitle = ({ game }) => (
 
 const GamePath = props => <Box {...props} />;
 
-const GamePathInput = ({ game, onChange, value }) => {
+const GamePathInput = ({ game, label, onChange, placeholder, value }) => {
   const [isInputLocked, setInputLocked] = useState(false);
   const inputEl = useRef(null);
 
@@ -53,11 +53,12 @@ const GamePathInput = ({ game, onChange, value }) => {
         game.fullName
       }`}
       id="game-path"
+      inputProps={{ readOnly: true, style: { cursor: 'pointer' } }}
       inputRef={inputEl}
-      label="Click to select your game folder"
+      label={label}
       onChange={onChange}
       onClick={handleInputClick}
-      readOnly
+      placeholder={placeholder}
       required
       value={value}
       variant="outlined"
